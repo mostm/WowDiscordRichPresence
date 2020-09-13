@@ -55,6 +55,8 @@ def parse_pixels(pixels):
     msg += iterate_pixels(pixels, 'g')
     msg += iterate_pixels(pixels, 'b')
     logger.info("Raw message: %s" % (msg,))
+    msg = ftfy.fix_text(msg)
+    logger.info("Decoded message: %s" % (msg,))
     return msg
 
 
