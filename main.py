@@ -4,6 +4,11 @@ import time
 import logging
 import traceback
 
+from time import sleep
+import ftfy
+import psutil
+
+
 from data import large_image_instanceMapID, name_classID, large_image_mapID, large_image_zone, \
     small_image_classID, size_difficultyID
 
@@ -20,6 +25,22 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.WARNING)
+
+
+def get_process(name):
+    for pid in psutil.pids():
+        try:
+            a = psutil.Process(pid)
+        except psutil.NoSuchProcess:
+            # means nada
+            continue
+        if a.name().endswith(name):
+            return a
+
+
+def get_wow_process():
+    return get_process('Wow.exe')
+
 
 def iterate_pixels(pixels, channel):
     line = ""
@@ -186,6 +207,9 @@ def start_drp():
     while True:  # The presence will stay on as long as the program is running
         try:
             msg = get_msg()
+            wow_proc = get_wow_process()
+            if not msg and not wow_proc:
+                rpc.clear()
             if msg and last_msg != msg:
                 print("Msg: " + msg)
                 data = parse_msg(msg)
