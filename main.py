@@ -80,27 +80,30 @@ def get_msg():
 
 def parse_msg(msg):
     ms = msg.split("|")
+    total = msg.count('|')
+    if total < 14:
+        logger.info('Total amount of entries is lower than parser was designed for. (reason: char limit)')
     i = 0
-    data = dict()
-    # basic
-    data["name"] = ms[i]; i+=1
-    data["realm"] = ms[i]; i+=1
-    data["classID"] = int(ms[i]); i+=1
-    data["race"] = ms[i]; i+=1
-    data["level"] = int(ms[i]); i+=1
-    data["itemLevel"] = int(float(ms[i])); i+=1
-    # location
-    data["mapAreaID"] = int(ms[i]); i+=1
-    data["instanceMapID"] = int(ms[i]); i+=1
-    data["zone"] = ms[i]; i+=1
-    data["miniMapZoneText"] = ms[i]; i+=1
-    # group
-    data["numGroupMembers"] = int(ms[i]); i+=1
-    data["maxGroupMembers"] = int(ms[i]); i+=1
-    data["difficultyID"] = int(ms[i]); i+=1
-    # status
-    data["status"] = ms[i]; i+=1
-    data["timeStarted"] = int(float(ms[i])); i+=1
+    entries = ['name', 'realm', 'classID', 'race', 'level', 'itemLevel', 'mapAreaID', 'instanceMapID', 'zone', 'miniMapZoneText', 'numGroupMembers', 'maxGroupMembers', 'difficultyID', 'status', 'timeStarted']
+    data = { # fallback values, if parcing wasn't successful.
+        'name': '',
+        'realm': '',
+        'classID': 0,
+        'race': '',
+        'level': 0,
+        'itemLevel': 0,
+        'mapAreaID': 0,
+        'instanceMapID': 0,
+        'zone': '',
+        'miniMapZoneText': '',
+        'numGroupMembers': 0,
+        'maxGroupMembers': 0,
+        'difficultyID': 0,
+        'status': 'In World',
+        'timeStarted': -1
+    }
+    for i in range(0, total):
+        data[entries[i]] = type(data[entries[i]])(ms[i])
     logger.info("Successfully parsed message into dict")
     return data
 
