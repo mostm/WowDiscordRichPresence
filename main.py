@@ -106,6 +106,10 @@ def parse_msg(msg):
         logger.info('Total amount of entries is lower than parser was designed for. (reason: char limit)')
     i = 0
     entries = ['name', 'realm', 'classID', 'race', 'level', 'itemLevel', 'mapAreaID', 'instanceMapID', 'zone', 'miniMapZoneText', 'numGroupMembers', 'maxGroupMembers', 'difficultyID', 'status', 'timeStarted']
+    time_started = -1
+    wow_proc = get_process('Wow.exe')
+    if wow_proc:
+        time_started = int(wow_proc.create_time())
     data = { # fallback values, if parcing wasn't successful.
         'name': '',
         'realm': '',
@@ -121,7 +125,7 @@ def parse_msg(msg):
         'maxGroupMembers': 0,
         'difficultyID': 0,
         'status': 'In World',
-        'timeStarted': -1
+        'timeStarted': time_started
     }
     for i in range(0, total):
         data[entries[i]] = type(data[entries[i]])(ms[i])
