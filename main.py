@@ -185,16 +185,22 @@ def start_drp():
             msg = get_msg()
             if msg and last_msg != msg:
                 print("Msg: " + msg)
-                last_msg = msg
                 data = parse_msg(msg)
-                rpc.update(state=format_state(data),
-                                 details=format_details(data),
-                                 start=format_start(data),
-                                 large_image=format_large_image(data),
-                                 large_text=format_large_text(data),
-                                 small_image=format_small_image(data),
-                                 small_text=format_small_text(data),
-                                 party_size=format_party_size(data))
+                rpc_update = {
+                    'state': format_state(data),
+                    'details': format_details(data),
+                    'start': format_start(data),
+                    'large_image': format_large_image(data),
+                    'large_text': format_large_text(data),
+                    'small_image': format_small_image(data),
+                    'small_text': format_small_text(data),
+                    'party_size': format_party_size(data)
+                }
+                rpc.update(**rpc_update)
+                if last_msg == "":
+                    sleep(3)
+                    rpc.update(**rpc_update)
+                last_msg = msg
                 logger.info("Successfully updated discord activity")
         except Exception:
             logger.exception("Exception in Main Loop")
