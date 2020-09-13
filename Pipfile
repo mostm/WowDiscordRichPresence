@@ -9,6 +9,7 @@ verify_ssl = true
 pypresence = "*"
 pillow = "*"
 ftfy = "*"
+psutil = "*"
 
 [requires]
 python_version = "3.8"
