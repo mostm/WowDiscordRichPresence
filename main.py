@@ -231,6 +231,8 @@ def start_drp():
                     'small_text': format_small_text(data),
                     'party_size': format_party_size(data)
                 }
+                if wow_proc:
+                    rpc_update['pid'] = wow_proc.pid
                 rpc.update(**rpc_update)
                 if last_msg == "":
                     sleep(3)
