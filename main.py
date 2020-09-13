@@ -210,6 +210,14 @@ def start_drp():
             wow_proc = get_wow_process()
             if not msg and not wow_proc:
                 rpc.clear()
+            if not msg and wow_proc:
+                rpc_update = {
+                    'pid': wow_proc.pid,
+                    'state': 'Main Menu',
+                    'details': 'Selecting a character',
+                    'start': int(wow_proc.create_time()),
+                }
+                rpc.update(**rpc_update)
             if msg and last_msg != msg:
                 print("Msg: " + msg)
                 data = parse_msg(msg)
